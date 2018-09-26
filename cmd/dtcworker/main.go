@@ -1,5 +1,7 @@
 package main
 
+// Worker service
+
 import "log"
 
 func main() {

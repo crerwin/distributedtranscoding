@@ -1,5 +1,7 @@
 package main
 
+// API server
+
 import (
 	"encoding/json"
 	"fmt"

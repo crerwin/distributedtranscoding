@@ -1,7 +1,15 @@
 package main
 
-import "log"
+// CLI executable
+
+import (
+	"log"
+
+	"github.com/crerwin/distributedtranscoding/pkg/dtc"
+)
 
 func main() {
-	log.Printf("distributed transcoding cli")
+	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime)) // no timestamps on cli
+	log.Printf("distributed transcoding cli version %v", dtc.Version)
+
 }
