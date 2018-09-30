@@ -3,6 +3,7 @@ package executors
 import (
 	"log"
 	"os/exec"
+	"strings"
 )
 
 type cmdExecutor struct {
@@ -19,4 +20,13 @@ func NewCmdExecutor(command string) *cmdExecutor {
 		ce.command = command
 	}
 	return ce
+}
+
+func (ce *cmdExecutor) Execute(args ...string) string {
+	cmd := exec.Command(ce.command, args...)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		log.Fatalf("cmd.Run() failed with %s\n", err)
+	}
+	return strings.TrimSuffix(string(out), "\n")
 }

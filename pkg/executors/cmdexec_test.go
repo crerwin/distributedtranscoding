@@ -20,3 +20,22 @@ func TestNewCmdExecutor(t *testing.T) {
 		}
 	}
 }
+
+func TestExecute(t *testing.T) {
+	cases := []struct {
+		cmd  string
+		args []string
+		want string
+	}{
+		{"echo", []string{}, ""},
+		{"echo", []string{"test"}, "test"},
+		{"echo", []string{"test1", "test2"}, "test1 test2"},
+	}
+	for _, c := range cases {
+		ce := NewCmdExecutor(c.cmd)
+		got := ce.Execute(c.args...)
+		if got != c.want {
+			t.Errorf("Execute() == %v, wanted %v", got, c.want)
+		}
+	}
+}
