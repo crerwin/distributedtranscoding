@@ -11,5 +11,9 @@ func NewCmdExecutor(command string) *cmdExecutor {
 }
 
 func (ce *cmdExecutor) Execute(args ...string) (string, error) {
-	return ce.command + " mock output", nil
+	cmd := ce.command
+	for _, a := range args {
+		cmd += " " + a
+	}
+	return cmd, nil
 }

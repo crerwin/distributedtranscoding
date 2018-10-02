@@ -21,3 +21,8 @@ func (e *videoTranscodingExecutor) DetectCrop(args ...string) string {
 	output, _ := e.executor.Execute()
 	return output
 }
+
+func (e *videoTranscodingExecutor) TranscodeVideo(args ...string) string {
+	output, _ := e.executor.Execute(args...)
+	return output
+}
