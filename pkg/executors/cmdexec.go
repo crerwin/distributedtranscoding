@@ -1,9 +1,10 @@
 package executors
 
 import (
-	"log"
 	"os/exec"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type cmdExecutor struct {
@@ -14,19 +15,19 @@ func NewCmdExecutor(command string) *cmdExecutor {
 	ce := new(cmdExecutor)
 	path, err := exec.LookPath(command)
 	if err != nil {
-		log.Printf("didn't find %s executable\n", command)
+		log.Warnf("didn't find %s executable\n", command)
 	} else {
-		log.Printf("%s is executable and is in '%s'\n", command, path)
+		log.Debugf("%s is executable and is in '%s'\n", command, path)
 		ce.command = command
 	}
 	return ce
 }
 
-func (ce *cmdExecutor) Execute(args ...string) string {
+func (ce *cmdExecutor) Execute(args ...string) (string, error) {
 	cmd := exec.Command(ce.command, args...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatalf("cmd.Run() failed with %s\n", err)
+		log.Warnf("cmd.Run() failed with %s\n", err)
 	}
-	return strings.TrimSuffix(string(out), "\n")
+	return strings.TrimSuffix(string(out), "\n"), err
 }

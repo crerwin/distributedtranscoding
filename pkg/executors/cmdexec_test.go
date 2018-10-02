@@ -33,7 +33,7 @@ func TestExecute(t *testing.T) {
 	}
 	for _, c := range cases {
 		ce := NewCmdExecutor(c.cmd)
-		got := ce.Execute(c.args...)
+		got, _ := ce.Execute(c.args...)
 		if got != c.want {
 			t.Errorf("Execute() == %v, wanted %v", got, c.want)
 		}
