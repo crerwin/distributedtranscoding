@@ -1,26 +1,41 @@
 package dtc
 
 import (
+	"encoding/json"
 	"strconv"
 	"strings"
 )
 
 type item struct {
-	crop   string
-	width  int
-	height int
+	FileName string
+	Crop     string
+	width    int
+	height   int
 }
 
-func NewItem(width, height int) *item {
+func NewItem(filename string, width, height int) *item {
 	i := new(item)
+	i.FileName = filename
 	i.width = width
 	i.height = height
+	i.Crop = "0:0:0:0"
 	return i
+}
+
+func (i *item) MarshalBinary() ([]byte, error) {
+	return json.Marshal(i)
+}
+
+func (i *item) UnmarshalBinary(data []byte) error {
+	if err := json.Unmarshal(data, &i); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (i *item) setCrop(value string) {
 	if validCrop(value, i.width, i.height) {
-		i.crop = value
+		i.Crop = value
 	}
 }
 

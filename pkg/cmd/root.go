@@ -18,6 +18,10 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
+	redisCmd.AddCommand(redisPingCmd)
+	redisCmd.AddCommand(redisInitCmd)
+	redisCmd.AddCommand(redisAddCmd)
+	rootCmd.AddCommand(redisCmd)
 }
 
 func Execute() {
