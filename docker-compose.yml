@@ -32,7 +32,7 @@ services:
     command: 
       - /bin/sh
       - -c 
-      - "while true; do redis-cli -h redis lrange work_queue 0 -1; sleep 10; done"
+      - "while true; do redis-cli -h redis scan 0; sleep 10; done"
 
 networks:
   redis-net:

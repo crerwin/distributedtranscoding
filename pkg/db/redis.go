@@ -13,6 +13,7 @@ type RedisClient struct {
 	client *redis.Client
 }
 
+// NewRedisClient returns a redis client object
 func NewRedisClient() *RedisClient {
 	client := new(RedisClient)
 	client.client = redis.NewClient(&redis.Options{
@@ -24,22 +25,24 @@ func NewRedisClient() *RedisClient {
 	return client
 }
 
+// Ping pings redis
 func (c *RedisClient) Ping() {
 	pong, err := c.client.Ping().Result()
 	fmt.Println(pong, err)
 }
 
+// Initialize clears the work queue
 func (c *RedisClient) Initialize() {
-	log.Print("Deleting the key work_queue")
-	err := c.client.Del("work_queue").Err()
-	if err != nil {
-		fmt.Println(err)
-	}
+	log.Print("Flushing database")
+	c.client.FlushAll()
+
 }
 
-func (c *RedisClient) AddToWorkQueue(item string) {
-	i := dtc.NewItem("title00.mkv", 1920, 1080)
-	err := c.client.LPush("work_queue", i).Err()
+// AddToWorkQueue adds a new work item to the work queue
+func (c *RedisClient) AddToWorkQueue(item *dtc.Item) {
+	c.client.Set(item.InputFile+":OutputFile", item.OutputFile, 0)
+	c.client.Set(item.InputFile+":Crop", item.Crop, 0)
+	err := c.client.LPush("work_queue", item.InputFile).Err()
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -6,34 +6,37 @@ import (
 	"strings"
 )
 
-type item struct {
-	FileName string
-	Crop     string
-	width    int
-	height   int
+type Item struct {
+	InputFile  string
+	OutputFile string
+	Crop       string
+	Filters    []string
+	ForcedRate string
+	width      int
+	height     int
 }
 
-func NewItem(filename string, width, height int) *item {
-	i := new(item)
-	i.FileName = filename
+func NewItem(filename string, width, height int) *Item {
+	i := new(Item)
+	i.InputFile = filename
 	i.width = width
 	i.height = height
 	i.Crop = "0:0:0:0"
 	return i
 }
 
-func (i *item) MarshalBinary() ([]byte, error) {
+func (i *Item) MarshalBinary() ([]byte, error) {
 	return json.Marshal(i)
 }
 
-func (i *item) UnmarshalBinary(data []byte) error {
+func (i *Item) UnmarshalBinary(data []byte) error {
 	if err := json.Unmarshal(data, &i); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *item) setCrop(value string) {
+func (i *Item) SetCrop(value string) {
 	if validCrop(value, i.width, i.height) {
 		i.Crop = value
 	}

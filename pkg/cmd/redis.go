@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/crerwin/distributedtranscoding/pkg/db"
+	"github.com/crerwin/distributedtranscoding/pkg/dtc"
 	"github.com/spf13/cobra"
 )
 
@@ -39,5 +40,10 @@ func redisInitRun(cmd *cobra.Command, args []string) {
 
 func redisAddRun(cmd *cobra.Command, args []string) {
 	redis := db.NewRedisClient()
-	redis.AddToWorkQueue("hello")
+	i := new(dtc.Item)
+	i.InputFile = "/data/inbox/cab/Tristram Shandy - A Cock and Bull Story (2005).mkv"
+	i.OutputFile = "/data/outbox/cab/Tristram Shandy - A Cock and Bull Story (2005).mkv"
+	i.Crop = "0:0:0:0"
+	i.ForcedRate = "23.976"
+	redis.AddToWorkQueue(i)
 }
