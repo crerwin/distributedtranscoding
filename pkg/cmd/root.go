@@ -22,6 +22,11 @@ func init() {
 	redisCmd.AddCommand(redisInitCmd)
 	redisCmd.AddCommand(redisAddCmd)
 	rootCmd.AddCommand(redisCmd)
+	rootCmd.AddCommand(kubernetesCmd)
+	kubernetesCmd.AddCommand(kubernetesJobCmd)
+	kubernetesJobCmd.AddCommand(kubernetesJobListCmd)
+	kubernetesCmd.AddCommand(kubernetesInitCmd)
+	kubernetesJobCmd.AddCommand(kubernetesJobCreateCmd)
 }
 
 func Execute() {
