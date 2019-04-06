@@ -1,0 +1,26 @@
+package dtc
+
+import "testing"
+
+func TestCreateJobName(t *testing.T) {
+	cases := []struct {
+		prefix   string
+		fileName string
+		want     string
+	}{
+		{"dtc-", "Frasier - s01e01.mkv", "dtc-frasiers01e01"},
+		{"dtc-", "Airplane! (1980).mkv", "dtc-airplane1980"},
+		{"dtc-", "Master and Commander - The Far Side of the World (2003).mkv",
+			"dtc-masterandcommanderthefarsideoftheworld2003"},
+		{"ohmygodbeckylookatthisreallylongsuperlongprefixthatjustkeepsgoingandgoingandgoingandgoingomgitssobigthatswhatshesaid-------",
+			"Night Of The Day Of The Dawn Of The Son Of The Bride Of The Return Of The Revenge Of The Terror Of The Attack Of The Evil, Mutant, Hellbound, Flesh-Eating, Crawling, Alien, Zombified, Subhumanoid Living Dead — Part 5",
+			"ohmygodbeckylookatthisreallylongsuperlongprefixthatjustkeepsgoingandgoingandgoingandgoingomgitssobigthatswhatshesaid-------nightofthedayofthedawnofthesonofthebrideofthereturnoftherevengeoftheterroroftheattackoftheevilmutanthellboundflesheatingcrawlingal"},
+	}
+	for _, c := range cases {
+		got := createJobName(c.prefix, c.fileName)
+		if got != c.want {
+			t.Errorf("createJobName(%v, %v) == %v, want %v", c.prefix,
+				c.fileName, got, c.want)
+		}
+	}
+}
