@@ -20,6 +20,8 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(redisCmd)
 	rootCmd.AddCommand(kubernetesCmd)
+	rootCmd.PersistentFlags().StringP("workspace", "w", "/Volumes/transcode",
+		"Workspace directory")
 }
 
 func Execute() {

@@ -3,8 +3,11 @@ package dtc
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 
 	batchv1 "k8s.io/api/batch/v1"
 	apiv1 "k8s.io/api/core/v1"
@@ -16,10 +19,12 @@ import (
 type KubeClient struct {
 	kubeconfig string
 	clientset  *kubernetes.Clientset
+	workspace  string
 }
 
 func NewKubeClient() *KubeClient {
 	client := new(KubeClient)
+	client.workspace = "/data"
 	client.kubeconfig = getKubeConfig()
 	config, err := clientcmd.BuildConfigFromFlags("", client.kubeconfig)
 	if err != nil {
@@ -89,18 +94,54 @@ func (c *KubeClient) Init() {
 	}
 }
 
+func createJobName(prefix string, fileName string) string {
+	maxLength := 253
+	// start with a prefix
+	jobName := prefix
+
+	// get the extension
+	extension := filepath.Ext(fileName)
+
+	// remove the extension
+	fileMinusExtension := strings.TrimSuffix(fileName, extension)
+
+	// create a regex object to remove non-alphanumeric characters
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// remove non-alphanumeric characters
+	cleanedFileName := reg.ReplaceAllString(fileMinusExtension, "")
+
+	// make all characters lowercase
+	cleanedFileName = strings.ToLower(cleanedFileName)
+
+	// append cleanedFileName to jobName
+	jobName = jobName + cleanedFileName
+
+	// Kubernetes resource names have to be 253 characters or less
+	if len(jobName) <= maxLength {
+		return jobName
+	} else {
+		jobName = jobName[0:maxLength]
+		return jobName
+	}
+}
+
 func (c *KubeClient) CreateTranscodeJob(j *Job) {
+	name := createJobName("dtc-", j.Item.FileName)
 	kubejob := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "dtc-1",
+			Name: name,
 		},
 		Spec: batchv1.JobSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
 						{
-							Name:  "dtc-1",
-							Image: "crerwin/video_transcoding_docker",
+							Name:  name,
+							Image: "ntodd/video-transcoding",
 							VolumeMounts: []apiv1.VolumeMount{
 								{
 									Name:      "transcode",
@@ -111,10 +152,8 @@ func (c *KubeClient) CreateTranscodeJob(j *Job) {
 								"transcode-video",
 								"--crop", j.Item.Crop,
 								"--no-log",
-								"--filter", "detelecine",
-								"--force-rate", "29.97",
-								"--output", j.OutboxPath + j.Item.SubPath + j.Item.FileName,
-								j.InboxPath + j.Item.SubPath + j.Item.FileName,
+								"--output", filepath.Join(c.workspace, j.OutboxPath, j.Item.SubPath, j.Item.FileName),
+								filepath.Join(c.workspace, j.InboxPath, j.Item.SubPath, j.Item.FileName),
 							},
 						},
 					},

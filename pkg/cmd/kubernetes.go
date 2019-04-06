@@ -58,26 +58,26 @@ func kubernetesInitRun(cmd *cobra.Command, args []string) {
 }
 
 func kubernetesJobCreateRun(cmd *cobra.Command, args []string) {
-	workspacePath := "/Volumes/transcode/"
-	//c := dtc.NewKubeClient()
-	i := new(dtc.Item)
-	i.FileName = filepath.Base(args[0])
-	i.Crop, _ = cmd.Flags().GetString("crop")
-	i.Filters, _ = cmd.Flags().GetStringSlice("filters")
-	i.ForcedRate, _ = cmd.Flags().GetString("forcedRate")
+	workspacePath, _ := cmd.Flags().GetString("workspace")
+	c := dtc.NewKubeClient()
 	j := new(dtc.Job)
 	j.InboxPath = "inbox/"
 	j.OutboxPath = "outbox/"
-	j.Item = i
-	j.Item.SubPath = "Frasier/s1d1/"
-	//c.CreateTranscodeJob(i)
-	fmt.Printf("file: %v\n", i.FileName)
-	fmt.Printf("crop: %v\n", i.Crop)
-	fmt.Printf("filters: %v\n", i.Filters)
+	j.Item = dtc.NewItemFromPath(args[0], filepath.Join(workspacePath, j.InboxPath))
+	j.Item.Crop, _ = cmd.Flags().GetString("crop")
+	j.Item.Filters, _ = cmd.Flags().GetStringSlice("filters")
+	j.Item.ForcedRate, _ = cmd.Flags().GetString("forcedRate")
+
+	fmt.Printf("file: %v\n", j.Item.FileName)
+	fmt.Printf("crop: %v\n", j.Item.Crop)
+	fmt.Printf("filters: %v\n", j.Item.Filters)
 	fmt.Printf("forcedRate: %v\n",
-		i.ForcedRate)
+		j.Item.ForcedRate)
 	fmt.Printf("inputpath: %v\n",
-		workspacePath+j.InboxPath+j.Item.SubPath+j.Item.FileName)
+		filepath.Join(workspacePath, j.InboxPath, j.Item.SubPath,
+			j.Item.FileName))
 	fmt.Printf("outputpath: %v\n",
-		workspacePath+j.OutboxPath+j.Item.SubPath+j.Item.FileName)
+		filepath.Join(workspacePath, j.OutboxPath, j.Item.SubPath,
+			j.Item.FileName))
+	c.CreateTranscodeJob(j)
 }
