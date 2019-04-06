@@ -17,15 +17,6 @@ type Item struct {
 	height     int
 }
 
-func NewItem(filename string, width, height int) *Item {
-	i := new(Item)
-	i.FileName = filename
-	i.width = width
-	i.height = height
-	i.Crop = "0:0:0:0"
-	return i
-}
-
 func NewItemFromPath(path string, inboxPath string) *Item {
 	i := new(Item)
 	i.FileName = filepath.Base(path)

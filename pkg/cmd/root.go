@@ -18,18 +18,8 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
-	redisCmd.AddCommand(redisPingCmd)
-	redisCmd.AddCommand(redisInitCmd)
-	redisCmd.AddCommand(redisAddCmd)
 	rootCmd.AddCommand(redisCmd)
 	rootCmd.AddCommand(kubernetesCmd)
-	kubernetesCmd.AddCommand(kubernetesJobCmd)
-	kubernetesJobCmd.AddCommand(kubernetesJobListCmd)
-	kubernetesCmd.AddCommand(kubernetesInitCmd)
-	kubernetesJobCmd.AddCommand(kubernetesJobCreateCmd)
-	kubernetesJobCreateCmd.Flags().StringP("crop", "c", "0:0:0:0", "Crop n:n:n:n")
-	kubernetesJobCreateCmd.Flags().StringSliceP("filters", "f", []string{}, "Filters")
-	kubernetesJobCreateCmd.Flags().StringP("forcedRate", "r", "", "Framerate to force")
 }
 
 func Execute() {

@@ -36,6 +36,19 @@ var kubernetesInitCmd = &cobra.Command{
 	Run:   kubernetesInitRun,
 }
 
+func init() {
+	kubernetesCmd.AddCommand(kubernetesInitCmd)
+	kubernetesCmd.AddCommand(kubernetesJobCmd)
+	kubernetesJobCmd.AddCommand(kubernetesJobListCmd)
+	kubernetesJobCmd.AddCommand(kubernetesJobCreateCmd)
+	kubernetesJobCreateCmd.Flags().StringP("crop", "c", "0:0:0:0",
+		"Crop n:n:n:n")
+	kubernetesJobCreateCmd.Flags().StringSliceP("filters", "f", []string{},
+		"Filters")
+	kubernetesJobCreateCmd.Flags().StringP("forcedRate", "r", "",
+		"Framerate to force")
+}
+
 func kubernetesJobListRun(cmd *cobra.Command, args []string) {
 	dtc.NewKubeClient().GetJobs()
 }
@@ -61,7 +74,10 @@ func kubernetesJobCreateRun(cmd *cobra.Command, args []string) {
 	fmt.Printf("file: %v\n", i.FileName)
 	fmt.Printf("crop: %v\n", i.Crop)
 	fmt.Printf("filters: %v\n", i.Filters)
-	fmt.Printf("forcedRate: %v\n", i.ForcedRate)
-	fmt.Printf("inputpath: %v\n", workspacePath+j.InboxPath+j.Item.SubPath+j.Item.FileName)
-	fmt.Printf("outputpath: %v\n", workspacePath+j.OutboxPath+j.Item.SubPath+j.Item.FileName)
+	fmt.Printf("forcedRate: %v\n",
+		i.ForcedRate)
+	fmt.Printf("inputpath: %v\n",
+		workspacePath+j.InboxPath+j.Item.SubPath+j.Item.FileName)
+	fmt.Printf("outputpath: %v\n",
+		workspacePath+j.OutboxPath+j.Item.SubPath+j.Item.FileName)
 }

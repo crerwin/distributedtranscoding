@@ -28,6 +28,12 @@ var redisAddCmd = &cobra.Command{
 	Run: redisAddRun,
 }
 
+func init() {
+	redisCmd.AddCommand(redisPingCmd)
+	redisCmd.AddCommand(redisInitCmd)
+	redisCmd.AddCommand(redisAddCmd)
+}
+
 func redisPingRun(cmd *cobra.Command, args []string) {
 	redis := db.NewRedisClient()
 	redis.Ping()
