@@ -2,8 +2,8 @@ image: golang:1.12.1
 
 cache:
   paths:
-    - /go/src/github.com
-    - /go/src/k8s.io
+    - /go/src/github.com/
+    - /go/src/k8s.io/
 
 stages:
   - test
