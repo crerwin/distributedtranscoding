@@ -27,7 +27,6 @@ func init() {
 	kubernetesJobCmd.AddCommand(kubernetesJobListCmd)
 	kubernetesCmd.AddCommand(kubernetesInitCmd)
 	kubernetesJobCmd.AddCommand(kubernetesJobCreateCmd)
-	kubernetesJobCreateCmd.Flags().StringP("outputFile", "o", "", "Output file")
 	kubernetesJobCreateCmd.Flags().StringP("crop", "c", "0:0:0:0", "Crop n:n:n:n")
 	kubernetesJobCreateCmd.Flags().StringSliceP("filters", "f", []string{}, "Filters")
 	kubernetesJobCreateCmd.Flags().StringP("forcedRate", "r", "", "Framerate to force")

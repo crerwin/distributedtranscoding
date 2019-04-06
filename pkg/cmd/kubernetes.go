@@ -45,6 +45,7 @@ func kubernetesInitRun(cmd *cobra.Command, args []string) {
 }
 
 func kubernetesJobCreateRun(cmd *cobra.Command, args []string) {
+	workspacePath := "/Volumes/transcode/"
 	//c := dtc.NewKubeClient()
 	i := new(dtc.Item)
 	i.FileName = filepath.Base(args[0])
@@ -54,13 +55,13 @@ func kubernetesJobCreateRun(cmd *cobra.Command, args []string) {
 	j := new(dtc.Job)
 	j.InboxPath = "inbox/"
 	j.OutboxPath = "outbox/"
-	j.ItemSubPath = "Frasier/s1d1/"
 	j.Item = i
+	j.Item.SubPath = "Frasier/s1d1/"
 	//c.CreateTranscodeJob(i)
 	fmt.Printf("file: %v\n", i.FileName)
 	fmt.Printf("crop: %v\n", i.Crop)
 	fmt.Printf("filters: %v\n", i.Filters)
 	fmt.Printf("forcedRate: %v\n", i.ForcedRate)
-	fmt.Printf("inputpath: %v\n", j.InboxPath+j.ItemSubPath+j.Item.FileName)
-	fmt.Printf("outputpath: %v\n", j.OutboxPath+j.ItemSubPath+j.Item.FileName)
+	fmt.Printf("inputpath: %v\n", workspacePath+j.InboxPath+j.Item.SubPath+j.Item.FileName)
+	fmt.Printf("outputpath: %v\n", workspacePath+j.OutboxPath+j.Item.SubPath+j.Item.FileName)
 }

@@ -2,12 +2,14 @@ package dtc
 
 import (
 	"encoding/json"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
 
 type Item struct {
 	FileName   string
+	SubPath    string
 	Crop       string
 	Filters    []string
 	ForcedRate string
@@ -21,6 +23,14 @@ func NewItem(filename string, width, height int) *Item {
 	i.width = width
 	i.height = height
 	i.Crop = "0:0:0:0"
+	return i
+}
+
+func NewItemFromPath(path string, inboxPath string) *Item {
+	i := new(Item)
+	i.FileName = filepath.Base(path)
+	relativePath, _ := filepath.Rel(inboxPath, path)
+	i.SubPath, _ = filepath.Split(relativePath)
 	return i
 }
 
