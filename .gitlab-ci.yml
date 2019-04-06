@@ -1,8 +1,16 @@
 image: golang:1.12.1
 
+cache:
+  paths:
+    - /go/src/github.com
+    - /go/src/k8s.io
+
 stages:
   - test
   - build
+
+before_script:
+  - go get -v -d ./...
 
 unit_tests:
   stage: test
