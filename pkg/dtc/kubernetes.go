@@ -89,8 +89,8 @@ func (c *KubeClient) Init() {
 	}
 }
 
-func (c *KubeClient) CreateTranscodeJob(i *Item) {
-	job := &batchv1.Job{
+func (c *KubeClient) CreateTranscodeJob(j *Job) {
+	kubejob := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "dtc-1",
 		},
@@ -109,12 +109,12 @@ func (c *KubeClient) CreateTranscodeJob(i *Item) {
 							},
 							Command: []string{
 								"transcode-video",
-								"--crop", i.Crop,
+								"--crop", j.Item.Crop,
 								"--no-log",
 								"--filter", "detelecine",
 								"--force-rate", "29.97",
-								"--output", i.OutputFile,
-								i.InputFile,
+								"--output", j.OutboxPath + j.ItemSubPath + j.Item.FileName,
+								j.InboxPath + j.ItemSubPath + j.Item.FileName,
 							},
 						},
 					},
@@ -133,7 +133,7 @@ func (c *KubeClient) CreateTranscodeJob(i *Item) {
 			},
 		},
 	}
-	_, err := c.clientset.BatchV1().Jobs("default").Create(job)
+	_, err := c.clientset.BatchV1().Jobs("default").Create(kubejob)
 	if err != nil {
 		panic(err.Error())
 	}

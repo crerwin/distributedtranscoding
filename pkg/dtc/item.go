@@ -7,8 +7,7 @@ import (
 )
 
 type Item struct {
-	InputFile  string
-	OutputFile string
+	FileName   string
 	Crop       string
 	Filters    []string
 	ForcedRate string
@@ -18,7 +17,7 @@ type Item struct {
 
 func NewItem(filename string, width, height int) *Item {
 	i := new(Item)
-	i.InputFile = filename
+	i.FileName = filename
 	i.width = width
 	i.height = height
 	i.Crop = "0:0:0:0"

@@ -40,9 +40,8 @@ func (c *RedisClient) Initialize() {
 
 // AddToWorkQueue adds a new work item to the work queue
 func (c *RedisClient) AddToWorkQueue(item *dtc.Item) {
-	c.client.Set(item.InputFile+":OutputFile", item.OutputFile, 0)
-	c.client.Set(item.InputFile+":Crop", item.Crop, 0)
-	err := c.client.LPush("work_queue", item.InputFile).Err()
+	c.client.Set(item.FileName+":FileName", item.FileName, 0)
+	err := c.client.LPush("work_queue", item.FileName).Err()
 	if err != nil {
 		fmt.Println(err)
 	}

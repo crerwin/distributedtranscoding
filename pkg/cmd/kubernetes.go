@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"path/filepath"
+
 	"github.com/crerwin/distributedtranscoding/pkg/dtc"
 	"github.com/spf13/cobra"
 )
@@ -42,10 +45,22 @@ func kubernetesInitRun(cmd *cobra.Command, args []string) {
 }
 
 func kubernetesJobCreateRun(cmd *cobra.Command, args []string) {
-	c := dtc.NewKubeClient()
+	//c := dtc.NewKubeClient()
 	i := new(dtc.Item)
-	i.InputFile = "/data/inbox/frasier/s1d1/Frasier - s01e01.mkv"
-	i.OutputFile = "/data/outbox/frasier/s1d1/Frasier - s01e01.mkv"
-	i.Crop = "0:0:0:0"
-	c.CreateTranscodeJob(i)
+	i.FileName = filepath.Base(args[0])
+	i.Crop, _ = cmd.Flags().GetString("crop")
+	i.Filters, _ = cmd.Flags().GetStringSlice("filters")
+	i.ForcedRate, _ = cmd.Flags().GetString("forcedRate")
+	j := new(dtc.Job)
+	j.InboxPath = "inbox/"
+	j.OutboxPath = "outbox/"
+	j.ItemSubPath = "Frasier/s1d1/"
+	j.Item = i
+	//c.CreateTranscodeJob(i)
+	fmt.Printf("file: %v\n", i.FileName)
+	fmt.Printf("crop: %v\n", i.Crop)
+	fmt.Printf("filters: %v\n", i.Filters)
+	fmt.Printf("forcedRate: %v\n", i.ForcedRate)
+	fmt.Printf("inputpath: %v\n", j.InboxPath+j.ItemSubPath+j.Item.FileName)
+	fmt.Printf("outputpath: %v\n", j.OutboxPath+j.ItemSubPath+j.Item.FileName)
 }
