@@ -9,7 +9,7 @@ func TestCreateJobName(t *testing.T) {
 		want     string
 	}{
 		{"dtc-", "Frasier - s01e01.mkv", "dtc-frasiers01e01"},
-		{"dtc-", "Airplane! (1980).mkv", "dtc-airplane1980"},
+		{"dtc-", "Airplane! (1980)/Airplane! (1980).mkv", "dtc-airplane1980airplane1980"},
 		{"dtc-", "Master and Commander - The Far Side of the World (2003).mkv",
 			"dtc-masterandcommanderthefarsideoftheworld2003"},
 		{"ohmygodbeckylookatthisreallylongsuperlongprefixthatjustkeepsgoingandgoingandgoingandgoingomgitssobigthatswhatshesaid-------",

@@ -130,7 +130,7 @@ func createJobName(prefix string, fileName string) string {
 }
 
 func (c *KubeClient) CreateTranscodeJob(j *Job) {
-	name := createJobName("dtc-", j.Item.FileName)
+	name := createJobName("dtc-", filepath.Join(j.Item.SubPath, j.Item.FileName))
 	kubejob := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
