@@ -1,13 +1,31 @@
 image: golang:1.12.9
 
+cache:
+  paths:
+    - .cache
+
 stages:
   - test
   - build
+
+before_script:
+  - mkdir -p .cache
+  - export GOPATH="$CI_PROJECT_DIR/.cache"
 
 unit_tests:
   stage: test
   script:
     - go test ./...
+
+data_race_detector:
+  stage: test
+  script:
+    - go test -race ./...
+
+lint:
+  stage: test
+  script:
+    - golint ./...
 
 build:
   stage: build
