@@ -20,6 +20,7 @@ unit_tests:
   script:
     - pwd
     - ls -al
+    - go list ./...
     - go test ./...
 
 build:
