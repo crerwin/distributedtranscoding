@@ -18,6 +18,8 @@ before_script:
 unit_tests:
   stage: test
   script:
+    - pwd
+    - ls -al
     - go test ./...
 
 build:
