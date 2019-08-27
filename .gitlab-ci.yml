@@ -1,26 +1,12 @@
-image: golang:1.12.7
-
-cache:
-  paths:
-    - /go/src/github.com
-    - /go/src/k8s.io
+image: golang:1.12.9
 
 stages:
   - test
   - build
 
-before_script:
-  - mkdir -p /go/src/github.com/$CI_PROJECT_NAMESPACE /go/src/_/builds
-  - cp -r $CI_PROJECT_DIR /go/src/github.com/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
-  - ln -s /go/src/github.com/$CI_PROJECT_NAMESPACE /go/src/_/builds/$CI_PROJECT_NAMESPACE
-  - go get -v -d ./...
-
 unit_tests:
   stage: test
   script:
-    - pwd
-    - ls -al
-    - go list ./...
     - go test ./...
 
 build:
