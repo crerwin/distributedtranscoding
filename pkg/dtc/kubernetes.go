@@ -95,7 +95,12 @@ func (c *KubeClient) Init() {
 }
 
 func createJobName(prefix string, fileName string) string {
-	maxLength := 253
+	maxPrefixLength := 10
+	maxLength := 63
+
+	if len(prefix) > maxPrefixLength {
+		log.Fatal("prefix too long")
+	}
 	// start with a prefix
 	jobName := prefix
 
@@ -117,16 +122,21 @@ func createJobName(prefix string, fileName string) string {
 	// make all characters lowercase
 	cleanedFileName = strings.ToLower(cleanedFileName)
 
+	// Limit name to maxLength characters, favoring the end of the name (where)
+	// the most info is)
+	if len(jobName)+len(cleanedFileName) > maxLength {
+		fmt.Printf("jobName: %v\n", jobName)
+		fmt.Printf("cleanedFileName: %v\n", cleanedFileName)
+		amountToRemove := len(cleanedFileName) + len(jobName) - maxLength
+		fmt.Printf("amountToRemove: %v\n", amountToRemove)
+		cleanedFileName = cleanedFileName[amountToRemove:]
+	}
+
 	// append cleanedFileName to jobName
 	jobName = jobName + cleanedFileName
 
 	// Kubernetes resource names have to be 253 characters or less
-	if len(jobName) <= maxLength {
-		return jobName
-	} else {
-		jobName = jobName[0:maxLength]
-		return jobName
-	}
+	return jobName
 }
 
 func (c *KubeClient) CreateTranscodeJob(j *Job) {

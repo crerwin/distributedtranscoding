@@ -2,6 +2,7 @@ package dtc
 
 import (
 	"encoding/json"
+	"fmt"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -21,7 +22,9 @@ func NewItemFromPath(path string, inboxPath string) *Item {
 	i := new(Item)
 	i.FileName = filepath.Base(path)
 	relativePath, _ := filepath.Rel(inboxPath, path)
+	fmt.Printf("relative path: %v\n", relativePath)
 	i.SubPath, _ = filepath.Split(relativePath)
+	fmt.Printf("subpath: %v\n", i.SubPath)
 	return i
 }
 
