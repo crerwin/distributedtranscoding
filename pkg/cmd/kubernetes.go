@@ -30,14 +30,7 @@ var kubernetesJobCreateCmd = &cobra.Command{
 	Run:   kubernetesJobCreateRun,
 }
 
-var kubernetesInitCmd = &cobra.Command{
-	Use:   "init",
-	Short: "Initialize",
-	Run:   kubernetesInitRun,
-}
-
 func init() {
-	kubernetesCmd.AddCommand(kubernetesInitCmd)
 	kubernetesCmd.AddCommand(kubernetesJobCmd)
 	kubernetesJobCmd.AddCommand(kubernetesJobListCmd)
 	kubernetesJobCmd.AddCommand(kubernetesJobCreateCmd)
@@ -51,10 +44,6 @@ func init() {
 
 func kubernetesJobListRun(cmd *cobra.Command, args []string) {
 	dtc.NewKubeClient().GetJobs()
-}
-
-func kubernetesInitRun(cmd *cobra.Command, args []string) {
-	dtc.NewKubeClient().Init()
 }
 
 func kubernetesJobCreateRun(cmd *cobra.Command, args []string) {

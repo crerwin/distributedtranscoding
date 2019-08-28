@@ -68,32 +68,6 @@ func (c *KubeClient) GetJobs() {
 	}
 }
 
-func (c *KubeClient) Init() {
-	ns, err := c.clientset.CoreV1().Namespaces().Get("dtc", metav1.GetOptions{})
-	if err != nil {
-		if err.Error() == "namespaces \"dtc\" not found" {
-			fmt.Println("dtc namespace does not exist, creating...")
-			newns := &apiv1.Namespace{
-				ObjectMeta: metav1.ObjectMeta{
-					Name: "dtc",
-					Labels: map[string]string{
-						"name": "dtc",
-					},
-				},
-			}
-			_, err2 := c.clientset.CoreV1().Namespaces().Create(newns)
-			if err2 != nil {
-				panic(err2.Error())
-			}
-		} else {
-			panic(err.Error())
-		}
-		fmt.Println(ns.Name)
-	} else {
-		fmt.Println("dtc namespace already exists - ready to go.")
-	}
-}
-
 func createJobName(prefix string, fileName string) string {
 	maxPrefixLength := 10
 	maxLength := 63
