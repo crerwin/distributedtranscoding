@@ -12,12 +12,6 @@ before_script:
   - mkdir -p .cache
   - export GOPATH="$CI_PROJECT_DIR/.cache"
 
-lint:
-  stage: test
-  script:
-    - go get -u golang.org/x/lint/golint
-    - golint ./...
-
 unit_tests:
   stage: test
   script:
