@@ -3,7 +3,6 @@ module github.com/crerwin/distributedtranscoding
 go 1.12
 
 require (
-	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
