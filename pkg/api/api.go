@@ -5,17 +5,17 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/crerwin/distributedtranscoding/pkg/config"
 	"github.com/crerwin/distributedtranscoding/pkg/dtc"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/spf13/viper"
 )
 
 // Serve brings up the DTC API
 func Serve() {
-	var config config.Configuration
-	port := config.API.Port
-	log.Println("Hosting API on port ", port)
+	// var config config.Configuration
+	port := ":" + viper.GetString("api.port")
+	log.Println("Hosting API on port:", port)
 	router := chi.NewRouter()
 
 	router.Use(middleware.RequestID)
