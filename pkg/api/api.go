@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/crerwin/distributedtranscoding/pkg/config"
 	"github.com/crerwin/distributedtranscoding/pkg/dtc"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -12,7 +13,9 @@ import (
 
 // Serve brings up the DTC API
 func Serve() {
-	port := ":80"
+	var config config.Configuration
+	port := config.API.Port
+	log.Println("Hosting API on port ", port)
 	router := chi.NewRouter()
 
 	router.Use(middleware.RequestID)
